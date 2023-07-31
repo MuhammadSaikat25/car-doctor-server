@@ -31,7 +31,8 @@ async function run() {
     const userCollection=client.db('car-doctor').collection('user')
     const bookingCollection=client.db('car-doctor').collection('booking')
     await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    //  JWT
     //get all Services
     app.get('/service',async(req,res)=>{
       const result=await serviceCollection.find().toArray()
@@ -59,6 +60,26 @@ async function run() {
       const result=await bookingCollection.insertOne(data)
       res.send(result)
     })
+
+    // getting all user 
+    app.get('/getAllUser',async(req,res)=>{
+      const result=await userCollection.find().toArray()
+      res.send(result)
+    })
+
+    // make user admin
+    app.patch('/makeAdmin/:email',async(req,res)=>{
+      const data=req.params.email 
+      const query={email:data}
+      const upDate={
+        $set:{
+          role:'admin'
+        }
+      }
+      const result=await userCollection.updateOne(query,upDate)
+      res.send(result)
+    })
+
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
