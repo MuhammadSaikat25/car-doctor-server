@@ -102,6 +102,13 @@ async function run() {
       const result=await userCollection.deleteOne(query)
       res.send(result)
     })
+    // adding service by admin
+    app.post('/addService',VerifyJwt,verifyAdmin,async(req,res)=>{
+      const data=req.body
+      const result=await serviceCollection.insertOne(data)
+      res.send(result)
+    })
+
     // make user admin
     app.patch('/makeAdmin/:email',VerifyJwt,verifyAdmin, async(req,res)=>{
       const data=req.params.email 
