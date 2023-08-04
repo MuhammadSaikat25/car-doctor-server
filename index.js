@@ -62,7 +62,7 @@ async function run() {
       }
       next()
     }
-    //get all Services
+    //getting all Services
     app.get('/service',async(req,res)=>{
       const result=await serviceCollection.find().toArray()
       res.send(result)
@@ -100,6 +100,13 @@ async function run() {
       const email=req.params.email
       const query={email:email}
       const result=await userCollection.deleteOne(query)
+      res.send(result)
+    })
+    // deleting a service by admin
+    app.delete('/deleteService/:id',VerifyJwt,verifyAdmin,async(req,res)=>{
+      const id=req.params.id 
+      const query={_id:new ObjectId(id)}
+      const result=await serviceCollection.deleteOne(query)
       res.send(result)
     })
     // adding service by admin
