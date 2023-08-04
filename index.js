@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 const port = process.env.PORT || 5000
-const jwt=require('jsonwebtoken')
+const jwt=require('jsonwebtoken');
 app.use(cors())
 app.use(express.json())
 require('dotenv').config()
@@ -95,7 +95,13 @@ async function run() {
       const result=await userCollection.find().toArray()
       res.send(result)
     })
-    
+    // delete a user
+    app.delete('/deleteUser/:email',VerifyJwt,verifyAdmin,async(req,res)=>{
+      const email=req.params.email
+      const query={email:email}
+      const result=await userCollection.deleteOne(query)
+      res.send(result)
+    })
     // make user admin
     app.patch('/makeAdmin/:email',VerifyJwt,verifyAdmin, async(req,res)=>{
       const data=req.params.email 
