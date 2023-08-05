@@ -67,7 +67,13 @@ async function run() {
       const result=await serviceCollection.find().toArray()
       res.send(result)
     })
-
+    // single user booking
+    app.get('/userBooking/:email',VerifyJwt,async(req,res)=>{
+      const email=req.params.email
+      const query={email:email}
+      const result=await bookingCollection.find(query).toArray()
+      res.send(result)
+    })
     // getting a single service 
     app.get('/singleService/:id',async(req,res)=>{
       const id=req.params.id 
@@ -93,6 +99,13 @@ async function run() {
     // getting all user 
     app.get('/getAllUser',VerifyJwt,verifyAdmin, async(req,res)=>{
       const result=await userCollection.find().toArray()
+      res.send(result)
+    })
+    //delete user booking
+    app.delete('/deleteUserBook/:id',VerifyJwt,async(req,res)=>{
+      const id=req.params.id 
+      const query={_id:new ObjectId(id)}
+      const result=await bookingCollection.deleteOne(query)
       res.send(result)
     })
     // delete a user
